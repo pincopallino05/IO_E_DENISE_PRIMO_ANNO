@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il nostro primo anno insieme</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #d53f8c;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .sottotitolo {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #d53f8c;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .evento {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            margin-bottom: 30px;
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .evento.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .evento.sinistra { left: 0; text-align: right; }
+        .evento.destra { left: 50%; text-align: left; }
+        .evento::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #d53f8c;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .evento.destra::after { left: -13px; }
+        
+        .contenuto {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .sticker {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            font-size: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .contenuto h2 { color: #d53f8c; margin-top: 0; }
+        .data { font-weight: bold; color: #888; font-size: 0.9em; }
+        .immagine-event { max-width: 100%; border-radius: 8px; margin-top: 10px; outline: none; }
+        .musica-btn {
+            background: #d53f8c;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(213, 63, 140, 0.3);
+            transition: background 0.3s;
+        }
+        .musica-btn:hover { background: #b83279; }
+        .musical-note { position: fixed; font-size: 30px; animation: flyUp 2s ease-out forwards; pointer-events: none; z-index: 100; }
+        @keyframes flyUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-200px); } }
+
+        @media screen and (max-width: 600px) {
+            .timeline::after { left: 31px; }
+            .evento { width: 100%; padding-left: 70px; padding-right: 25px; text-align: left; }
+            .evento::after { left: 15px; }
+            .evento.destra { left: 0%; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Il nostro primo anno insieme</h1>
+    <p class="sottotitolo">I momenti più belli del nostro percorso</p>
+
+    <div class="musica-container" style="text-align:center; margin: 40px 0;">
+        <button class="musica-btn" onclick="playMusica()">Un po' di musica?</button>
+        <audio id="musica" src="musica/canzone.mp3" loop></audio>
+    </div>
+
+    <div class="timeline">
+        <!-- EVENTO 1 (FOTO) -->
+        <div class="evento sinistra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">💖</div>
+                <h2>Il nostro primo incontro</h2>
+                <p class="data">Data dell'incontro</p>
+                <p>Scrivi qui come vi siete conosciuti e le prime sensazioni provate...</p>
+                <img src="immagini/foto1.jpg" alt="Ricordo 1" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 2 (FOTO) -->
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🌸</div>
+                <h2>Il primo appuntamento</h2>
+                <p class="data">Data del primo appuntamento</p>
+                <p>Scrivi qui dove siete andati e qualche dettaglio speciale...</p>
+                <img src="immagini/foto2.jpg" alt="Ricordo 2" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 3 (VIDEO) -->
+        <div class="evento sinistra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">✨</div>
+                <h2>Un momento speciale</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui un ricordo o un aneddoto legato a questo video...</p>
+                <video controls class="immagine-event"><source src="video/video1.mp4" type="video/mp4"></video>
+            </div>
+        </div>
+
+        <!-- EVENTO 4 (FOTO) -->
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🌹</div>
+                <h2>Un ricordo felice</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui la descrizione di questa bellissima giornata...</p>
+                <img src="immagini/foto3.jpg" alt="Ricordo 3" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 5 (VIDEO) -->
+        <div class="evento sinistra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🌟</div>
+                <h2>Le nostre risate</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui perché questo video ti fa sorridere ogni volta...</p>
+                <video controls class="immagine-event"><source src="video/video2.mp4" type="video/mp4"></video>
+            </div>
+        </div>
+
+        <!-- EVENTO 6 (FOTO) -->
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">📸</div>
+                <h2>Un viaggio insieme</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui il ricordo di questa gita o vacanza speciale...</p>
+                <img src="immagini/foto5.jpg" alt="Ricordo 5" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 7 (FOTO) -->
+        <div class="evento sinistra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">💫</div>
+                <h2>Un'avventura indimenticabile</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui cosa avete fatto di bello in questo giorno...</p>
+                <img src="immagini/foto6.jpg" alt="Ricordo 6" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 8 (FOTO) -->
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">💌</div>
+                <h2>Un piccolo traguardo</h2>
+                <p class="data">Data evento</p>
+                <p>Scrivi qui un bel pensiero dedicato a voi due...</p>
+                <img src="immagini/foto7.jpg" alt="Ricordo 7" class="immagine-event">
+            </div>
+        </div>
+
+        <!-- EVENTO 9 - FINALE (FOTO) -->
+        <div class="evento sinistra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🎉</div>
+                <h2>Oggi: il nostro primo anniversario!</h2>
+                <p class="data">Data di oggi</p>
+                <p>Scrivi qui la tua dedica d'amore finale per il primo anno insieme...</p>
+                <img src="immagini/foto4.jpg" alt="Anniversario" class="immagine-event">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function playMusica() {
+            const audio = document.getElementById('musica');
+            const btn = document.querySelector('.musica-btn');
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = "⏸ Pausa";
+                createNote();
+            } else {
+                audio.pause();
+                btn.textContent = "Un po' di musica?";
+            }
+        }
+        function createNote() {
+            const note = document.createElement('div');
+            note.innerHTML = "🎵";
+            note.className = "musical-note";
+            note.style.left = (Math.random() * 80 + 10) + "%";
+            note.style.bottom = "20px";
+            document.body.appendChild(note);
+            setTimeout(() => note.remove(), 2000);
+        }
+        
+        // Logica per fermare la musica quando parte un video
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('play', () => {
+                const audio = document.getElementById('musica');
+                const btn = document.querySelector('.musica-btn');
+                if (!audio.paused) {
+                    audio.pause();
+                    btn.textContent = "Un po' di musica?";
+                }
+            });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        });
+        document.querySelectorAll('.scroll-fade').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
