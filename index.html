@@ -11,6 +11,7 @@
             margin: 0;
             padding: 20px;
             color: #333;
+            overflow-x: hidden;
         }
         h1 {
             text-align: center;
@@ -105,8 +106,28 @@
             transition: background 0.3s;
         }
         .musica-btn:hover { background: #b83279; }
-        .musical-note { position: fixed; font-size: 30px; animation: flyUp 2s ease-out forwards; pointer-events: none; z-index: 100; }
-        @keyframes flyUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-200px); } }
+
+        /* CSS DELLE NOTE FLUTTUANTI */
+        .nota-fluttuante {
+            position: fixed;
+            bottom: -30px;
+            font-size: 20px; /* Dimensione delicata */
+            pointer-events: none; /* Impossibile cliccarci sopra, non disturba la lettura */
+            z-index: 9999;
+            animation: fluttuaLenta 7s linear forwards;
+            opacity: 0.6;
+        }
+
+        @keyframes fluttuaLenta {
+            0% {
+                transform: translateY(0) scale(0.8) rotate(0deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-105vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
         @media screen and (max-width: 600px) {
             .timeline::after { left: 31px; }
@@ -161,20 +182,20 @@
         </div>
 
         <!-- EVENTO 4 (2 FOTO) -->
-<div class="evento destra scroll-fade">
-    <div class="contenuto">
-        <div class="sticker">🚌</div>
-        <h2>A marzo abbiamo fatto un viaggio?😜</h2>
-        <p class="data">5-6 Marzo 2026</p>
-        <p>Un viaggio unico, un sacco di roba vista e ho vissuto la notte più incredibile, accesa e movimentata di sempre, come posso dimenticarla</p>
-        
-        <!-- Prima foto -->
-        <img src="immagini/foto4a.jpg" alt="Ricordo 4A" class="immagine-event">
-        
-        <!-- Seconda foto (aggiunta sotto) -->
-        <img src="immagini/foto4b.jpg" alt="Ricordo 4B" class="immagine-event" style="margin-top: 15px;">
-    </div>
-</div>
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🚌</div>
+                <h2>A marzo abbiamo fatto un viaggio?😜</h2>
+                <p class="data">5-6 Marzo 2026</p>
+                <p>Un viaggio unico, un sacco di roba vista e ho vissuto la notte più incredibile, accesa e movimentata di sempre, come posso dimenticarla</p>
+                
+                <!-- Prima foto -->
+                <img src="immagini/foto4a.jpg" alt="Ricordo 4A" class="immagine-event">
+                
+                <!-- Seconda foto -->
+                <img src="immagini/foto4b.jpg" alt="Ricordo 4B" class="immagine-event" style="margin-top: 15px;">
+            </div>
+        </div>
 
         <!-- EVENTO 5 (FOTO) -->
         <div class="evento sinistra scroll-fade">
@@ -188,21 +209,21 @@
         </div>
 
         <!-- EVENTO 6 (FOTO) -->
-<div class="evento destra scroll-fade">
-    <div class="contenuto">
-        <div class="sticker">🏆</div>
-        <h2>Si correeee🏃‍♂️🏃‍♀️</h2>
-        <p class="data">16 Maggio 2026</p>
-        <p>Che sudata quel giorno, eh amo? Che figata mi hai fatto fare, sono pronto per la prossima sfida insieme!</p>
-        <img src="immagini/foto6.jpg" alt="Ricordo 6" class="immagine-event">
-    </div>
-</div>
+        <div class="evento destra scroll-fade">
+            <div class="contenuto">
+                <div class="sticker">🏆</div>
+                <h2>Si correeee🏃‍♂️🏃‍♀️</h2>
+                <p class="data">16 Maggio 2026</p>
+                <p>Che sudata quel giorno, eh amo? Che figata mi hai fatto fare, sono pronto per la prossima sfida insieme!</p>
+                <img src="immagini/foto6.jpg" alt="Ricordo 6" class="immagine-event">
+            </div>
+        </div>
         
         <!-- EVENTO 7 (FOTO) -->
         <div class="evento sinistra scroll-fade">
             <div class="contenuto">
                 <div class="sticker">🎤</div>
-                <h2>In radio non ci vogliamo andare? Subito!</h2></h2>
+                <h2>In radio non ci vogliamo andare? Subito!</h2>
                 <p class="data">11 Luglio 2026</p>
                 <p>Tra scooby doo, Supergirl e la nuova Dr, una domanda a testa e si vince</p>
                 <img src="immagini/foto7.jpg" alt="Ricordo 7" class="immagine-event">
@@ -233,42 +254,74 @@
     </div>
 
     <script>
+        const audio = document.getElementById('musica');
+        const btn = document.querySelector('.musica-btn');
+        let timerNote = null;
+
         function playMusica() {
-            const audio = document.getElementById('musica');
-            const btn = document.querySelector('.musica-btn');
             if (audio.paused) {
                 audio.play();
                 btn.textContent = "⏸ Pausa";
-                createNote();
+                avviaNoteContinuo();
             } else {
                 audio.pause();
-                btn.textContent = "Un po' di musica?";
+                btn.textContent = "Un po' di musica?🎵";
+                fermaNote();
             }
         }
-        function createNote() {
-            const note = document.createElement('div');
-            note.innerHTML = "🎵";
-            note.className = "musical-note";
-            note.style.left = (Math.random() * 80 + 10) + "%";
-            note.style.bottom = "20px";
-            document.body.appendChild(note);
-            setTimeout(() => note.remove(), 2000);
+
+        function creaSingolaNota() {
+            const simboli = ['🎵', '🎶', '🎼', '✨'];
+            const nota = document.createElement('div');
+            nota.className = 'nota-fluttuante';
+            nota.innerText = simboli[Math.floor(Math.random() * simboli.length)];
+            
+            // Posizione orizzontale casuale su tutta la larghezza dello schermo
+            nota.style.left = (Math.random() * 85 + 5) + "vw";
+            
+            document.body.appendChild(nota);
+
+            // Rimuove la nota dal codice dopo 7 secondi
+            setTimeout(() => {
+                nota.remove();
+            }, 7000);
         }
+
+        function avviaNoteContinuo() {
+            if (!timerNote) {
+                creaSingolaNota();
+                // Crea 1 nota ogni 2 secondi (2000 ms) per non essere invadente
+                timerNote = setInterval(creaSingolaNota, 2000); 
+            }
+        }
+
+        function fermaNote() {
+            clearInterval(timerNote);
+            timerNote = null;
+        }
+
+        // Se la canzone finisce da sola
+        audio.onended = function() {
+            btn.textContent = "Un po' di musica?🎵";
+            fermaNote();
+        };
         
-        // Logica per fermare la musica quando parte un video
+        // Ferma la musica e le note quando parte un video
         document.querySelectorAll('video').forEach(video => {
             video.addEventListener('play', () => {
-                const audio = document.getElementById('musica');
-                const btn = document.querySelector('.musica-btn');
                 if (!audio.paused) {
                     audio.pause();
-                    btn.textContent = "Un po' di musica?";
+                    btn.textContent = "Un po' di musica?🎵";
+                    fermaNote();
                 }
             });
         });
 
+        // Animazione allo scorrimento (Scroll Fade)
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) entry.target.classList.add('visible'); 
+            });
         });
         document.querySelectorAll('.scroll-fade').forEach(el => observer.observe(el));
     </script>
